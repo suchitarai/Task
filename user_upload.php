@@ -64,8 +64,7 @@ if (isset($_POST["import"])) {
 
 
 <body>
-    <h2>Import CSV file into Mysql using PHP</h2>
-    
+    <h2>Import CSV file into Mysql using PHP</h2>    
     <div id="response" class="<?php if(!empty($type)) { echo $type . " display-block"; } ?>"><?php if(!empty($message)) { echo $message; } ?></div>
     <div class="outer-scontainer">
         <div class="row">
@@ -79,43 +78,41 @@ if (isset($_POST["import"])) {
                     <button type="submit" id="submit" name="import"
                         class="btn-submit">Import</button>
                     <br />
-
                 </div>
-
             </form>
 
         </div>
-               <?php
-            $sqlSelect = "SELECT * FROM users";            
-            if ($dbobj->num_of_rows($sqlSelect) > 0) {
-                ?>
-            <table id='userTable'>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>SurName</th>
-                    <th>Email</th>
-
-                </tr>
-            </thead>
-<?php
-                $val=$dbobj->fetchAllRows($sqlSelect);
-				print_r($val);
-                foreach ($val as $row) {
-                    ?>
-                    
-                <tbody>
-                <tr>
-                    <td><?php  echo $row->name; ?></td>
-                    <td><?php  echo $row->surname; ?></td>
-                    <td><?php  echo $row->email; ?></td>
-                </tr>
-                    <?php
-                }
-                ?>
-                </tbody>
-        </table>
-        <?php } ?>
+		<?php
+		//----------Start: Show data Table-------------//
+		$sqlSelect = "SELECT * FROM users";            
+		if ($dbobj->num_of_rows($sqlSelect) > 0) {
+			?>
+			<table id='userTable'>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>SurName</th>
+						<th>Email</th>
+					</tr>
+				</thead>
+				<?php
+				$val=$dbobj->fetchAllRows($sqlSelect);
+				foreach ($val as $row) {
+					?>
+					<tbody>
+						<tr>
+							<td><?php  echo $row->name; ?></td>
+							<td><?php  echo $row->surname; ?></td>
+							<td><?php  echo $row->email; ?></td>
+						</tr>
+					<?php
+				}
+				?>
+				</tbody>
+			</table>
+			<?php }
+			//----------END: Show data Table-------------//
+		?>
     </div>
 
 </body>

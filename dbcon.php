@@ -25,7 +25,7 @@ class Dbconfig
 	}
 	public function query_run($query){
 		$result=mysqli_query($this->conn,$query);
-		return mysqli_affected_rows($result);
+		return mysqli_affected_rows($this->conn);
 	}
 }
 ?>

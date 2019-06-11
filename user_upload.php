@@ -1,9 +1,9 @@
-
 <html>
 <script src="jquery-3.2.1.min.js"></script>
 <link  href="css/style.css" rel="stylesheet">
 <head>
 <script type="text/javascript">
+<!----- get error response of upload file-------->
 $(document).ready(function() {
     $("#frmCSVImport").on("submit", function () {
 	    $("#response").attr("class", "");
@@ -24,18 +24,13 @@ $(document).ready(function() {
 <?php
 include("dbcon.php");
 $dbobj=new Dbconfig();
-if (isset($_POST["import"])) {
-    
-    $fileName = $_FILES["file"]["tmp_name"];
-    
-    if ($_FILES["file"]["size"] > 0) {
-        
-        $file = fopen($fileName, "r");
-        
+if (isset($_POST["import"])) {    
+    $fileName = $_FILES["file"]["tmp_name"];    
+    if ($_FILES["file"]["size"] > 0) {        
+        $file = fopen($fileName, "r");        
         while (($column = fgetcsv($file, 10000, ",")) !== FALSE) {
 			$unique_query=("SELECT * FROM `users` where email='" . $column[2] . "'");
 			if(($dbobj->num_of_rows($unique_query))==0){
-				print "------";exit;
 				$email = ($column[2]);
 				// check if e-mail address is well-formed
 				if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -46,7 +41,8 @@ if (isset($_POST["import"])) {
 				if($emailErr==0){
 				$sqlInsert = "INSERT into users (name,surname,email)
 					   values ('" . ucfirst($column[0]) . "','" . ucfirst($column[1]) . "','" . $column[2] . "')";
-				$result = mysqli_query($conn, $sqlInsert);
+					   
+				$result = $dbobj->query_run($sqlInsert);
 				}
             }
             if (! empty($result)) {
@@ -61,8 +57,6 @@ if (isset($_POST["import"])) {
 }
 ?>
 <!DOCTYPE html>
-
-
 <body>
     <h2>Import CSV file into Mysql using PHP</h2>    
     <div id="response" class="<?php if(!empty($type)) { echo $type . " display-block"; } ?>"><?php if(!empty($message)) { echo $message; } ?></div>

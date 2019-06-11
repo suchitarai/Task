@@ -1,3 +1,28 @@
+
+<html>
+<script src="jquery-3.2.1.min.js"></script>
+<link  href="css/style.css" rel="stylesheet">
+<head>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#frmCSVImport").on("submit", function () {
+
+	    $("#response").attr("class", "");
+        $("#response").html("");
+        var fileType = ".csv";
+        var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(" + fileType + ")$");
+        if (!regex.test($("#file").val().toLowerCase())) {
+        	    $("#response").addClass("error");
+        	    $("#response").addClass("display-block");
+            $("#response").html("Invalid File. Please Upload : <b>" + fileType + "</b> Files.");
+            return false;
+        }
+        return true;
+    });
+});
+</script>
+</head>
 <?php
 include("dbcon.php");
 if (isset($_POST["import"])) {
@@ -36,30 +61,7 @@ if (isset($_POST["import"])) {
 }
 ?>
 <!DOCTYPE html>
-<html>
 
-<head>
-<script src="jquery-3.2.1.min.js"></script>
-<link  href="css/style.css" rel="stylesheet">
-<script type="text/javascript">
-$(document).ready(function() {
-    $("#frmCSVImport").on("submit", function () {
-
-	    $("#response").attr("class", "");
-        $("#response").html("");
-        var fileType = ".csv";
-        var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(" + fileType + ")$");
-        if (!regex.test($("#file").val().toLowerCase())) {
-        	    $("#response").addClass("error");
-        	    $("#response").addClass("display-block");
-            $("#response").html("Invalid File. Please Upload : <b>" + fileType + "</b> Files.");
-            return false;
-        }
-        return true;
-    });
-});
-</script>
-</head>
 
 <body>
     <h2>Import CSV file into Mysql using PHP</h2>

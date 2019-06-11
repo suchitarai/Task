@@ -3,11 +3,9 @@
 <script src="jquery-3.2.1.min.js"></script>
 <link  href="css/style.css" rel="stylesheet">
 <head>
-
 <script type="text/javascript">
 $(document).ready(function() {
     $("#frmCSVImport").on("submit", function () {
-
 	    $("#response").attr("class", "");
         $("#response").html("");
         var fileType = ".csv";
@@ -25,6 +23,7 @@ $(document).ready(function() {
 </head>
 <?php
 include("dbcon.php");
+$dbobj=new Dbconfig();
 if (isset($_POST["import"])) {
     
     $fileName = $_FILES["file"]["tmp_name"];
@@ -34,8 +33,9 @@ if (isset($_POST["import"])) {
         $file = fopen($fileName, "r");
         
         while (($column = fgetcsv($file, 10000, ",")) !== FALSE) {
-			$unique_query=mysqli_query($conn,"SELECT * FROM `users` where email='" . $column[2] . "'");
-			if((mysqli_num_rows($unique_query))==0){
+			$unique_query=("SELECT * FROM `users` where email='" . $column[2] . "'");
+			if(($dbobj->num_of_rows($unique_query))==0){
+				print "------";exit;
 				$email = ($column[2]);
 				// check if e-mail address is well-formed
 				if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -86,10 +86,8 @@ if (isset($_POST["import"])) {
 
         </div>
                <?php
-            $sqlSelect = "SELECT * FROM users";
-            $result = mysqli_query($conn, $sqlSelect);
-            
-            if (mysqli_num_rows($result) > 0) {
+            $sqlSelect = "SELECT * FROM users";            
+            if ($dbobj->num_of_rows($sqlSelect) > 0) {
                 ?>
             <table id='userTable'>
             <thead>
@@ -101,15 +99,16 @@ if (isset($_POST["import"])) {
                 </tr>
             </thead>
 <?php
-                
-                while ($row = mysqli_fetch_array($result)) {
+                $val=$dbobj->fetchAllRows($sqlSelect);
+				print_r($val);
+                foreach ($val as $row) {
                     ?>
                     
                 <tbody>
                 <tr>
-                    <td><?php  echo $row['name']; ?></td>
-                    <td><?php  echo $row['surname']; ?></td>
-                    <td><?php  echo $row['email']; ?></td>
+                    <td><?php  echo $row->name; ?></td>
+                    <td><?php  echo $row->surname; ?></td>
+                    <td><?php  echo $row->email; ?></td>
                 </tr>
                     <?php
                 }

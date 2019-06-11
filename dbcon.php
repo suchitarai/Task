@@ -12,8 +12,11 @@ class Dbconfig
 	}	
 	
 	public function fetchAllRows($query){
-		$result = mysqli_query($this->conn,$query);
-		return mysqli_fetch_object($result);
+		$queryval = mysqli_query($this->conn,$query);
+		while ($record = mysqli_fetch_object($queryval)) {
+         $result[] = $record;
+		}
+		return $result;
 	}
 	
 	public function num_of_rows($query){
